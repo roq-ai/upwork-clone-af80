@@ -14,6 +14,7 @@ function UserListPage() {
     () => '/users',
     () => getUsers(),
   );
+
   const router = useRouter();
   return (
     <AppLayout>
