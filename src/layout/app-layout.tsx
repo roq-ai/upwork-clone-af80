@@ -102,29 +102,30 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   );
   loading = isLoading;
 
+  const isJobPoster = session?.user?.roles?.includes('job-poster');
   const LinkItems: Array<LinkItemProps> = [
-    { name: 'Users', icon: FiUsers, path: '/users', entity: 'user', service: AccessServiceEnum.PROJECT },
-    { name: 'Invites', icon: FiMail, path: '/invites', entity: RoqResourceEnum.INVITE },
+    { name: 'Manage Team', icon: FiMail, path: '/invites', entity: RoqResourceEnum.INVITE },
     { name: 'Chat', icon: FiMessageCircle, path: '/chat', entity: RoqResourceEnum.CONVERSATION },
-
     {
-      name: 'Company',
-      path: isTenantUser ? `/companies/view/${data?.[0]?.id}` : '/companies',
-      entity: 'company',
+      name: isJobPoster ? 'My Job Listing' : 'Job Feed',
+      path: '/jobs',
+      entity: 'job',
       service: AccessServiceEnum.PROJECT,
-      icon: FiBriefcase,
+      icon: FiClipboard,
     },
-    {
-      name: 'Application',
+  ];
+  if (!isJobPoster) {
+    LinkItems.push({
+      name: 'My Applications',
       path: '/applications',
       entity: 'application',
       service: AccessServiceEnum.PROJECT,
       icon: FiFileText,
-    },
-    { name: 'Job', path: '/jobs', entity: 'job', service: AccessServiceEnum.PROJECT, icon: FiClipboard },
+    });
+  }
 
-    /** Add navigation item here **/
-  ];
+  /** Add navigation item here **/
+
   const mainNav = LinkItems.filter((e) => e.service === AccessServiceEnum.PROJECT);
   const secondaryNav = LinkItems.filter((e) => e.service !== AccessServiceEnum.PROJECT);
   return (
@@ -191,12 +192,12 @@ const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.400',
+          bg: 'primary.500',
           color: 'white',
         }}
         {...rest}
         {...(isActive(path) && {
-          bg: 'cyan.400',
+          bg: 'primary.500',
           color: 'white',
         })}
       >

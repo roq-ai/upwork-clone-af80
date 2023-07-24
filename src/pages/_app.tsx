@@ -4,13 +4,18 @@ import type { AppProps } from 'next/app';
 import { RoqProvider, ChatProvider } from '@roq/nextjs';
 import { clientConfig } from 'config';
 import '@roq/nextjs/index.css';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { roqThemeLight } from 'styles/roq-theme';
 import Script from 'next/script';
 
 export default function App({ Component, pageProps }: AppProps) {
+  const theme = extendTheme({
+    colors: {
+      primary: { 500: '#108a00' },
+    },
+  });
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       {/* start tracking-scripts */}
       {/* end tracking-scripts */}
       <RoqProvider

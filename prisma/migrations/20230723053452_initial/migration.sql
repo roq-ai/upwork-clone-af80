@@ -1,9 +1,12 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- CreateTable
 CREATE TABLE "application" (
     "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "job_id" UUID NOT NULL,
     "user_id" UUID NOT NULL,
     "status" VARCHAR(255) NOT NULL,
+    "coverLetter" TEXT NOT NULL,
+    "attachement" TEXT,
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -64,4 +67,3 @@ ALTER TABLE "company" ADD CONSTRAINT "company_user_id_fkey" FOREIGN KEY ("user_i
 
 -- AddForeignKey
 ALTER TABLE "job" ADD CONSTRAINT "job_company_id_fkey" FOREIGN KEY ("company_id") REFERENCES "company"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-

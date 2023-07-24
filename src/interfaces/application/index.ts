@@ -7,9 +7,12 @@ export interface ApplicationInterface {
   job_id: string;
   user_id: string;
   status: string;
+  attachement: string;
+  roqConversationId: string;
+  profileImage: string;
   created_at?: any;
   updated_at?: any;
-
+  coverLetter: string;
   job?: JobInterface;
   user?: UserInterface;
   _count?: {};

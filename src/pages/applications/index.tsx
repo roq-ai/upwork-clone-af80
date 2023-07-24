@@ -16,10 +16,13 @@ import {
   IconButton,
   Flex,
   Center,
+  Divider,
+  Badge,
 } from '@chakra-ui/react';
 import useSWR from 'swr';
 import { Spinner } from '@chakra-ui/react';
-import { getApplications, deleteApplicationById } from 'apiSdk/applications';
+import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
+import { getApplications, deleteApplicationById, updateApplicationById } from 'apiSdk/applications';
 import { ApplicationInterface } from 'interfaces/application';
 import { Error } from 'components/error';
 import {
@@ -28,10 +31,13 @@ import {
   useAuthorizationApi,
   requireNextAuth,
   withAuthorization,
+  useSession,
+  ChatWindow,
 } from '@roq/nextjs';
 import { useRouter } from 'next/router';
-import { FiTrash, FiEdit2 } from 'react-icons/fi';
 import { compose } from 'lib/compose';
+import { getUsers } from 'apiSdk/users';
+import { UserInterface } from 'interfaces/user';
 
 function ApplicationListPage() {
   const { hasAccess } = useAuthorizationApi();
@@ -42,6 +48,8 @@ function ApplicationListPage() {
         relations: ['job', 'user'],
       }),
   );
+  console.log('chat application', { data });
+
   const router = useRouter();
   const [deleteError, setDeleteError] = useState(null);
 
@@ -54,27 +62,47 @@ function ApplicationListPage() {
       setDeleteError(error);
     }
   };
+  const [expandedApplication, setExpandedApplication] = useState<string | null>(null);
+
+  const handleToggleDetails = (applicationId: string) => {
+    setExpandedApplication((prevId) => (prevId === applicationId ? null : applicationId));
+  };
+
+  const { data: user } = useSWR<UserInterface[]>(
+    () => '/users',
+    () =>
+      getUsers({
+        email: session.user.email,
+      }),
+  );
+
+  const currentSession = useSession();
+  const currentRole = currentSession.session.user.roles[0];
+
+  type Status = 'Hired' | 'Rejected' | 'Submitted';
+  const { session } = useSession();
 
   const handleView = (id: string) => {
     if (hasAccess('application', AccessOperationEnum.READ, AccessServiceEnum.PROJECT)) {
       router.push(`/applications/view/${id}`);
     }
   };
-
+  const getButtonColor = (status: Status) => {
+    if (status === 'Hired') {
+      return 'green';
+    } else if (status === 'Rejected') {
+      return 'red';
+    } else {
+      return 'yellow';
+    }
+  };
   return (
     <AppLayout>
       <Box bg="white" p={4} rounded="md" shadow="md">
-        <Flex justifyContent="space-between" mb={4}>
+        <Flex justifyContent="space-between" alignItems="center" mb={4}>
           <Text as="h1" fontSize="2xl" fontWeight="bold">
-            Application
+            My Applications
           </Text>
-          {hasAccess('application', AccessOperationEnum.CREATE, AccessServiceEnum.PROJECT) && (
-            <NextLink href={`/applications/create`} passHref legacyBehavior>
-              <Button onClick={(e) => e.stopPropagation()} colorScheme="blue" mr="4" as="a">
-                Create
-              </Button>
-            </NextLink>
-          )}
         </Flex>
         {error && (
           <Box mb={4}>
@@ -83,7 +111,7 @@ function ApplicationListPage() {
         )}
         {deleteError && (
           <Box mb={4}>
-            <Error error={deleteError} />{' '}
+            <Error error={deleteError} />
           </Box>
         )}
         {isLoading ? (
@@ -91,69 +119,55 @@ function ApplicationListPage() {
             <Spinner />
           </Center>
         ) : (
-          <TableContainer>
-            <Table variant="simple">
-              <Thead>
-                <Tr>
-                  <Th>status</Th>
-                  {hasAccess('job', AccessOperationEnum.READ, AccessServiceEnum.PROJECT) && <Th>job</Th>}
-                  {hasAccess('user', AccessOperationEnum.READ, AccessServiceEnum.PROJECT) && <Th>user</Th>}
+          <Box>
+            {data?.map((record) => (
+              <Box key={record.id} mt={4}>
+                <Card p={4} border="1px solid" borderColor="gray.200" borderRadius="md" boxShadow="lg">
+                  <CardHeader>
+                    <Text fontSize="xl" fontWeight="bold">
+                      {record.job?.title}
+                    </Text>
+                  </CardHeader>
+                  <CardBody>
+                    <Text fontSize="md" fontWeight="medium">
+                      Cover Letter
+                    </Text>
+                    <Text py={2} fontSize="sm" color="gray.600" noOfLines={2}>
+                      {record.coverLetter}
+                    </Text>
+                  </CardBody>
+                  {expandedApplication === record.id && (
+                    <>
+                      <CardBody>
+                        <Text fontSize="md" fontWeight="medium">
+                          Job Description
+                        </Text>
+                        <Text py={2} fontSize="sm" color="gray.600">
+                          {record.job.description}
+                        </Text>
+                      </CardBody>
 
-                  <Th>Actions</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {data?.map((record) => (
-                  <Tr cursor="pointer" onClick={() => handleView(record.id)} key={record.id}>
-                    <Td>{record.status}</Td>
-                    {hasAccess('job', AccessOperationEnum.READ, AccessServiceEnum.PROJECT) && (
-                      <Td>
-                        <Link as={NextLink} href={`/jobs/view/${record.job?.id}`}>
-                          {record.job?.title}
-                        </Link>
-                      </Td>
-                    )}
-                    {hasAccess('user', AccessOperationEnum.READ, AccessServiceEnum.PROJECT) && (
-                      <Td>
-                        <Link as={NextLink} href={`/users/view/${record.user?.id}`}>
-                          {record.user?.email}
-                        </Link>
-                      </Td>
-                    )}
-
-                    <Td>
-                      {hasAccess('application', AccessOperationEnum.UPDATE, AccessServiceEnum.PROJECT) && (
-                        <NextLink href={`/applications/edit/${record.id}`} passHref legacyBehavior>
-                          <Button
-                            onClick={(e) => e.stopPropagation()}
-                            mr={2}
-                            as="a"
-                            variant="outline"
-                            colorScheme="blue"
-                            leftIcon={<FiEdit2 />}
-                          >
-                            Edit
-                          </Button>
-                        </NextLink>
+                      <Divider color="gray.200" mt={2} />
+                      <CardFooter mt={2}>
+                        <Badge colorScheme={getButtonColor(record.status as Status)} px={2} py={1} borderRadius="md">
+                          {record.status}
+                        </Badge>{' '}
+                      </CardFooter>
+                      {record?.roqConversationId && (
+                        <Box mt={12}>
+                          <ChatWindow conversationId={record.roqConversationId} />
+                        </Box>
                       )}
-                      {hasAccess('application', AccessOperationEnum.DELETE, AccessServiceEnum.PROJECT) && (
-                        <IconButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDelete(record.id);
-                          }}
-                          colorScheme="red"
-                          variant="outline"
-                          aria-label="edit"
-                          icon={<FiTrash />}
-                        />
-                      )}
-                    </Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                    </>
+                  )}
+                  <Divider color="gray.100" mb={3} />
+                  <Button onClick={() => handleToggleDetails(record.id)} width={200}>
+                    {expandedApplication === record.id ? 'Hide Detail' : 'Show Detail'}
+                  </Button>
+                </Card>
+              </Box>
+            ))}
+          </Box>
         )}
       </Box>
     </AppLayout>

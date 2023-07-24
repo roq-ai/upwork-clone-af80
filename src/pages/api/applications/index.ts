@@ -32,8 +32,22 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     await applicationValidationSchema.validate(req.body);
     const body = { ...req.body };
 
+    const job = await prisma.job.findFirst({ where: { id: body.job_id }, include: { company: true } });
+    const company = await prisma.company.findFirst({ where: { id: body.company_id } });
+    const companyUsers = await roqClient.asSuperAdmin().users({ filter: { tenantId: { equalTo: company.tenant_id } } });
+    const userIds = companyUsers.users.data.map((user) => user.id);
+
+    const conversationId = await roqClient.asUser(roqUserId).createConversation({
+      conversation: {
+        title: job.title,
+        ownerId: roqUserId,
+        memberIds: [roqUserId, ...userIds],
+        isGroup: true,
+      },
+    });
+
     const data = await prisma.application.create({
-      data: body,
+      data: { ...body, roqConversationId: conversationId.createConversation.id },
     });
     return res.status(200).json(data);
   }

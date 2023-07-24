@@ -6,6 +6,7 @@ export interface JobInterface {
   id?: string;
   title: string;
   description: string;
+  job_id:string;
   company_id: string;
   created_at?: any;
   updated_at?: any;
@@ -21,4 +22,6 @@ export interface JobGetQueryInterface extends GetQueryInterface {
   title?: string;
   description?: string;
   company_id?: string;
+  q?:string;
+  job_id?:string
 }
