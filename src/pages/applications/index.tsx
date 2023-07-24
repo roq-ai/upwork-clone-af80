@@ -173,6 +173,7 @@ function ApplicationListPage() {
     </AppLayout>
   );
 }
+
 export default compose(
   requireNextAuth({
     redirectTo: '/',
