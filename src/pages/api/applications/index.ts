@@ -45,7 +45,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         isGroup: true,
       },
     });
-
+    console.log("cov Id",{conversationId});
+    
     const data = await prisma.application.create({
       data: { ...body, roqConversationId: conversationId.createConversation.id },
     });

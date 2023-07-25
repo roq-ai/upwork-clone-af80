@@ -9,6 +9,7 @@ CREATE TABLE "application" (
     "attachement" TEXT,
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "roqConversationId" UUID,
 
     CONSTRAINT "application_pkey" PRIMARY KEY ("id")
 );
@@ -31,7 +32,7 @@ CREATE TABLE "company" (
 CREATE TABLE "job" (
     "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "title" VARCHAR(255) NOT NULL,
-    "description" VARCHAR(255) NOT NULL,
+    "description" TEXT NOT NULL,
     "company_id" UUID NOT NULL,
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,

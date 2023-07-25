@@ -42,7 +42,7 @@ export default function FileCard({ file }: { file: UserFile }) {
             },
           }}
         >
-          <Image rounded={'lg'} height={230} width={282} objectFit={'cover'} src={url} />
+          <Image alt='' rounded={'lg'} height={230} width={282} objectFit={'cover'} src={url} />
         </Box>
         <Stack pt={10} align={'center'}>
           <Text color={'gray.500'} fontSize={'sm'} textTransform={'uppercase'}>

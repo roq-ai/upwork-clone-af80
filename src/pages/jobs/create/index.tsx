@@ -55,7 +55,7 @@ function JobCreatePage() {
   const handleSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {
     setError(null);
     try {
-      await createJob({ ...values, company_id: company[0].id });
+      await createJob({ ...values, company_id: company?.[0].id });
       resetForm();
       router.push('/jobs');
     } catch (error) {
