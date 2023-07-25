@@ -1,7 +1,11 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { getServerSession } from '@roq/nextjs';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { prisma } from 'server/db';
+import { authorizationValidationMiddleware, errorHandlerMiddleware } from 'server/middlewares';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'GET') {
+  const { roqUserId, user } = await getServerSession(req);
+  if (req.method == 'GET') {
     const data = await prisma.job.findMany({
       where: {
         OR: [
@@ -23,3 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json(data);
   }
 }
+
+// export default function apiHandler(req: NextApiRequest, res: NextApiResponse) {
+//   return errorHandlerMiddleware(authorizationValidationMiddleware(handler))(req, res);
+// }
