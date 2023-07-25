@@ -50,7 +50,6 @@ function JobCreatePage() {
         tenant_id: session?.session.user.tenantId,
       }),
   );
-  console.log({ company });
 
   const handleSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {
     setError(null);
