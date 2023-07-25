@@ -59,7 +59,6 @@ function UserListPage() {
     </AppLayout>
   );
 }
-
 export default withAuthorization({
   service: AccessServiceEnum.PROJECT,
   entity: 'user',
