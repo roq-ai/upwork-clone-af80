@@ -74,7 +74,6 @@ function JobCreatePage() {
     validateOnChange: false,
     validateOnBlur: false,
   });
-
   return (
     <AppLayout>
       <Box bg="white" p={4} rounded="md" shadow="md">
