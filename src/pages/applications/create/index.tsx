@@ -53,7 +53,7 @@ function ApplicationCreatePage() {
     () => '/users',
     () =>
       getUsers({
-        tenant_id: session?.user?.tenantId,
+        email: session?.user?.email,
       }),
   );
   const currentId = router.query.job_id as string;
