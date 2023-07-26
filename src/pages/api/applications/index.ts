@@ -52,6 +52,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         recipients: {
           userIds: [...usersId],
         },
+        data: [
+          { key: 'title', value: job.title },
+          { key: 'jobUrl', value: `/jobs/view/${job.id}` },
+        ],
       },
     });
 
