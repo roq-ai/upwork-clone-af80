@@ -30,7 +30,7 @@ import {
   useSession,
   withAuthorization,
 } from '@roq/nextjs';
-import { updateApplicationById } from 'apiSdk/applications';
+import { getApplications, updateApplicationById } from 'apiSdk/applications';
 import { getUsers } from 'apiSdk/users';
 import { UserInterface } from 'interfaces/user';
 import { ApplicationInterface } from 'interfaces/application';
@@ -41,7 +41,6 @@ function JobViewPage() {
   const session = useSession();
   const currentRole = session.session.user.roles[0];
   const router = useRouter();
-  const [show, setShow] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
 
   const id = router.query.id as string;
@@ -50,6 +49,18 @@ function JobViewPage() {
     () =>
       getJobById(id, {
         relations: ['company', 'application'],
+      }),
+  );
+  const {
+    data: applications,
+    error: applicationError,
+    isLoading: applicationLoading,
+    mutate: applicationMutate,
+  } = useSWR<ApplicationInterface[]>(
+    () => '/applications',
+    () =>
+      getApplications({
+        relations: ['job', 'user'],
       }),
   );
 
@@ -64,7 +75,6 @@ function JobViewPage() {
 
   let userNames: any = {};
   data?.application.map((app) => {
-    // console.log({ app });
     const applicant = userData?.find((user) => user.id === app?.user_id);
     userNames[app.user_id] = {
       // profileImage:applicant?.
@@ -97,6 +107,8 @@ function JobViewPage() {
       setDeleteError(error);
     }
   };
+  const submitted = applications?.findIndex((app) => app?.job_id === id) !== -1;
+
 
   return (
     <AppLayout>
@@ -125,6 +137,14 @@ function JobViewPage() {
                 </Text>
                 <Text fontSize="md">{data?.description}</Text>
               </Box>
+              {hasAccess('job', AccessOperationEnum.READ, AccessServiceEnum.PROJECT) &&
+                currentRole === 'job-applicant' && (
+                  <Link href={`/applications/create/?job_id=${id}`}>
+                    <Button isDisabled={submitted} variant="solid" colorScheme="primary">
+                      {submitted ? 'Submitted' : 'Apply Now'}
+                    </Button>
+                  </Link>
+                )}
 
               <Divider />
               {hasAccess('application', AccessOperationEnum.READ, AccessServiceEnum.PROJECT) &&

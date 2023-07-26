@@ -189,6 +189,7 @@ const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => {
         align="center"
         p="4"
         mx="4"
+        mt='1'
         borderRadius="lg"
         role="group"
         cursor="pointer"
