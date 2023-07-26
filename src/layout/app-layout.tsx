@@ -40,6 +40,7 @@ import {
   RoqResourceEnum,
   useAuthorizationApi,
   AccessOperationEnum,
+  ChatProvider,
 } from '@roq/nextjs';
 import Link from 'next/link';
 import { HelpBox } from 'components/help-box';
@@ -246,7 +247,8 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       <AppLogo isMobile />
 
       <HStack spacing={{ base: '0', md: '6' }}>
-        {session?.roqUserId && <Text position="relative">{`${session.user?.roles?.join(', ')}`}</Text>}
+        {/* {session?.roqUserId && <Text position="relative">{`${session.user?.roles?.join(', ')}`}</Text>} */}
+        <ChatMessageBell />
         <NotificationBell className="layout-notification-bell" />
         <Flex alignItems={'center'}>
           {session?.roqUserId && <UserAccountDropdown className="layout-user-profile" />}

@@ -24,7 +24,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         tenantId: user.tenantId,
         roles: user.roles,
       })
-      .findMany(convertQueryToPrismaUtil(req.query, 'application'));
+      .findMany({ ...convertQueryToPrismaUtil(req.query, 'application'), orderBy: { created_at: 'desc' } });
     return res.status(200).json(data);
   }
 
