@@ -248,7 +248,6 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       <AppLogo isMobile />
 
       <HStack spacing={{ base: '0', md: '6' }}>
-        {/* {session?.roqUserId && <Text position="relative">{`${session.user?.roles?.join(', ')}`}</Text>} */}
         <ChatMessageBell />
         <NotificationBell className="layout-notification-bell" />
         <Flex alignItems={'center'}>

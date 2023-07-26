@@ -68,21 +68,22 @@ function ApplicationDetailPage() {
                 </CardHeader>
                 <CardBody>
                   <Text fontSize="md" fontWeight="medium">
-                    Cover Letter
-                  </Text>
-                  <Text py={2} fontSize="sm" color="gray.600" noOfLines={2}>
-                    {data.coverLetter}
-                  </Text>
-                </CardBody>
-
-                <CardBody>
-                  <Text fontSize="md" fontWeight="medium">
                     Job Description
                   </Text>
                   <Text py={2} fontSize="sm" color="gray.600">
                     {data.job.description}
                   </Text>
                 </CardBody>
+                <CardBody>
+                  <Text fontSize="md" fontWeight="medium">
+                    Cover Letter
+                  </Text>
+                  <Text py={2} fontSize="sm" color="gray.600" >
+                    {data.coverLetter}
+                  </Text>
+                </CardBody>
+
+
 
                 <Divider color="gray.200" mt={2} />
                 <CardFooter mt={2}>
