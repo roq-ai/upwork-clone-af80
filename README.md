@@ -1,6 +1,6 @@
-## Welcome to Upwork-clone
+## Welcome to Freelancer Portal
 
-Upwork-clone is a B2B SaaS application that was generated using [ROQ.ai](https://roq.ai/)
+Freelancer Portal is a B2B SaaS application that was generated using [ROQ.ai](https://roq.ai/)
 
 - Documentation: https://docs.roq.tech
 - License: MIT

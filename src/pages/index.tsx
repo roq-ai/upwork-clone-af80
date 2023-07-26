@@ -9,11 +9,11 @@ function HomePage() {
   return (
     <>
       <Head>
-        <title>{`Upwork-clone`}</title>
+        <title>{`Freelancer Portal`}</title>
 
         <meta
           name="description"
-          content="Welcome to Upwork-clone, your gateway to a world of opportunities. Connect with clients, apply for jobs, and engage in meaningful conversations, all in one place."
+          content="Welcome to Freelancer Portal, your gateway to a world of opportunities. Connect with clients, apply for jobs, and engage in meaningful conversations, all in one place."
         />
       </Head>
 
@@ -38,11 +38,11 @@ function HomePage() {
                   zIndex: -1,
                 }}
               >
-                {`Upwork-clone`}
+                {`Freelancer Portal`}
               </Text>
             </Heading>
             <Text fontSize={{ base: 'md', lg: 'lg' }} color={'gray.500'}>
-              {`Welcome to Upwork-clone, your gateway to a world of opportunities. Connect with clients, apply for jobs, and engage in meaningful conversations, all in one place.`}
+              {`Welcome to Freelancer Portal, your gateway to a world of opportunities. Connect with clients, apply for jobs, and engage in meaningful conversations, all in one place.`}
             </Text>
             <Stack direction="column" spacing={4} className="roles-container">
               <Text>Company</Text>

@@ -9,7 +9,7 @@ export const AppLogo = (props: AppLogoProps) => {
   const { isMobile } = props;
 
   const ownerRoles = ['job-poster', 'client'];
-  const appName = `Upwork-clone`;
+  const appName = `Freelancer Portal`;
 
   const { session } = useSession();
   const { data } = useGraphqlQuery({

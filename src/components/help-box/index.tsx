@@ -104,7 +104,7 @@ export const HelpBox: React.FC = () => {
   const tenantRoles: string[] = ['Job Poster', 'Client'];
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const addOns: string[] = ['chat', 'notifications', 'file'];
-  const applicationName = `Upwork-clone`;
+  const applicationName = `Freelancer Portal`;
   const tenantName = `Company`;
   const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL;
 

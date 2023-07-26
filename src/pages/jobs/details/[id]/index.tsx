@@ -97,6 +97,10 @@ function JobDetailPage() {
       setDeleteError(error);
     }
   };
+  function AttachementFileName(input: string) {
+    const slash = input.split('/')
+    return slash[slash.length - 1]
+  }
 
   return (
     <AppLayout>
@@ -156,10 +160,7 @@ function JobDetailPage() {
                             <Stack spacing="5">
                               <Stack spacing="1">
                                 <Text fontSize="lg" fontWeight="medium">
-                                  Attachement
-                                </Text>
-                                <Text fontSize="sm" color="muted">
-                                  This is the attachment of the applicant.
+                                  Attachements
                                 </Text>
                               </Stack>
                               <Box borderWidth={{ base: '0', md: '1px' }} p={{ base: '0', md: '2' }} borderRadius="lg">
@@ -175,7 +176,7 @@ function JobDetailPage() {
                                     <Icon as={FiFile} boxSize="5" />
                                     <Box fontSize="sm">
                                       <Text color="emphasized" fontWeight="medium">
-                                        {data.attachement}
+                                        {AttachementFileName(data.attachement)}
                                       </Text>
                                     </Box>
                                   </HStack>
