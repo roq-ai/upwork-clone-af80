@@ -40,6 +40,27 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         ...req.body,
       },
     });
+    const user = await prisma.user.findFirst({ where: { id: data.user_id } });
+    if (data.status === 'Hired') {
+      await roqClient.asSuperAdmin().notify({
+        notification: {
+          key: 'hiring',
+          recipients: {
+            userIds: [user.roq_user_id],
+          },
+        },
+      });
+    }
+    if (data.status === 'Rejected') {
+      await roqClient.asSuperAdmin().notify({
+        notification: {
+          key: 'rejection',
+          recipients: {
+            userIds: [user.roq_user_id],
+          },
+        },
+      });
+    }
 
     return res.status(200).json(data);
   }
