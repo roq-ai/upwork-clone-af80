@@ -138,7 +138,7 @@ function JobDetailPage() {
                         <Avatar src={data.user?.profileImage} mr={4} />
                         <Box flex="1">
                           <Text fontSize="lg" fontWeight="bold">
-                            {data.user.firstName ?? 'Unknown'} {data.user.lastName ?? 'User'}
+                            {data.user.firstName ?? 'Beshir'} {data.user.lastName ?? 'Dekebo'}
                           </Text>
                           <Text as="span" color={'gray.500'} lineHeight="1">
                             {data.user.email ?? 'Unknown'}

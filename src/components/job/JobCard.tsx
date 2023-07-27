@@ -27,7 +27,7 @@ function JobCard({ record, applications, currentRole, handleView, handleDelete }
         return new Date(dateString).toLocaleString(undefined, options);
     };
     return (
-        <Card mt={4} onClick={() => handleView(record.id)} key={record.id} variant={'outline'} cursor="pointer">
+        <Card mt={4} p={6} onClick={() => handleView(record.id)} key={record.id} variant={'outline'} cursor="pointer">
             <CardHeader>
                 <Text fontSize="xl" fontWeight="bold">
                     {record.title} - {record.company?.name}
