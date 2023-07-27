@@ -1,35 +1,20 @@
 import AppLayout from 'layout/app-layout';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   FormControl,
   FormLabel,
   Input,
   Button,
   Text,
-  Box,
-  Spinner,
-  FormErrorMessage,
-  Switch,
-  NumberInputStepper,
-  NumberDecrementStepper,
-  NumberInputField,
-  NumberIncrementStepper,
-  NumberInput,
-  Textarea,
+  Box, FormErrorMessage, Textarea
 } from '@chakra-ui/react';
 import { useFormik, FormikHelpers } from 'formik';
-import * as yup from 'yup';
-import DatePicker from 'react-datepicker';
-import { FiEdit3 } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import { createJob } from 'apiSdk/jobs';
 import { Error } from 'components/error';
 import { jobValidationSchema } from 'validationSchema/jobs';
-import { AsyncSelect } from 'components/async-select';
-import { ArrayFormField } from 'components/array-form-field';
 import { AccessOperationEnum, AccessServiceEnum, requireNextAuth, useSession, withAuthorization } from '@roq/nextjs';
 import { compose } from 'lib/compose';
-import { CompanyInterface } from 'interfaces/company';
 import { getCompanies } from 'apiSdk/companies';
 import { JobInterface } from 'interfaces/job';
 import useSWR from 'swr';

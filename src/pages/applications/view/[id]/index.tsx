@@ -1,26 +1,14 @@
 import AppLayout from 'layout/app-layout';
 import NextLink from 'next/link';
-import React, { useState } from 'react';
 import {
   Text,
   Box,
-  Spinner,
-  TableContainer,
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-  Button,
-  Link,
-  IconButton,
-  Flex,
+  Spinner, Button,
+  Link, Flex,
   Center,
-  Stack,
+  Stack
 } from '@chakra-ui/react';
-import { UserSelect } from 'components/user-select';
-import { FiTrash, FiEdit2, FiEdit3 } from 'react-icons/fi';
+import { FiEdit2 } from 'react-icons/fi';
 import { getApplicationById } from 'apiSdk/applications';
 import { Error } from 'components/error';
 import { ApplicationInterface } from 'interfaces/application';
@@ -46,10 +34,6 @@ function ApplicationViewPage() {
         relations: ['job', 'user'],
       }),
   );
-
-  const [deleteError, setDeleteError] = useState(null);
-  const [createError, setCreateError] = useState(null);
-
   return (
     <AppLayout>
       <Box bg="white" p={4} rounded="md" shadow="md">

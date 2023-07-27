@@ -1,40 +1,23 @@
 import AppLayout from 'layout/app-layout';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   FormControl,
-  FormLabel,
-  Input,
-  Button,
+  FormLabel, Button,
   Text,
-  Box,
-  Spinner,
-  FormErrorMessage,
-  Switch,
-  NumberInputStepper,
-  NumberDecrementStepper,
-  NumberInputField,
-  NumberIncrementStepper,
-  NumberInput,
-  Textarea,
-  Stack,
+  Box, FormErrorMessage, Textarea,
+  Stack
 } from '@chakra-ui/react';
 import { useFormik, FormikHelpers } from 'formik';
-import * as yup from 'yup';
-import DatePicker from 'react-datepicker';
-import { FiEdit3 } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import { createApplication } from 'apiSdk/applications';
 import { Error } from 'components/error';
 import { applicationValidationSchema } from 'validationSchema/applications';
-import { AsyncSelect } from 'components/async-select';
-import { ArrayFormField } from 'components/array-form-field';
 import { AccessOperationEnum, AccessServiceEnum, requireNextAuth, useSession, withAuthorization } from '@roq/nextjs';
 import { compose } from 'lib/compose';
 import { JobInterface } from 'interfaces/job';
 import { UserInterface } from 'interfaces/user';
-import { getJobById, getJobs } from 'apiSdk/jobs';
+import { getJobById } from 'apiSdk/jobs';
 import { getUsers } from 'apiSdk/users';
-import { ApplicationInterface } from 'interfaces/application';
 import useSWR from 'swr';
 import { FileUpload } from '@roq/nextjs';
 
@@ -43,8 +26,7 @@ function ApplicationCreatePage() {
   const [error, setError] = useState(null);
   const [attachement, setAttachement] = useState('');
   const { session } = useSession();
-  // console.log({session});
-  
+
   const {
     data: currentUser,
     isLoading,
@@ -69,7 +51,6 @@ function ApplicationCreatePage() {
         relations: ['company', 'application'],
       }),
   );
-  // console.log({ currentUser });
   const handleSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {
     setError(null);
     try {
@@ -80,8 +61,7 @@ function ApplicationCreatePage() {
         status: 'submitted',
         user_id: currentUser?.[0].id,
       });
-      // await hire({ jobTitle: currentJob.title, userId:currentJob.company.user_id, applicantId: user?.[0].id });
-    
+
       resetForm();
       router.push('/applications');
     } catch (error) {
@@ -112,18 +92,12 @@ function ApplicationCreatePage() {
           </Text>
         </Box>
         <Box mb={4}>
-          {/* <Text as="h4" fontSize="sm" fontWeight="bold">
-            Job Title: */}
           <Text as="h3" fontSize="lg" fontWeight="normal">
             {currentJob?.title}
           </Text>
-          {/* </Text> */}
-          {/* <Text as="h5" fontSize="sm" fontWeight="bold">
-            Job Description:{' '} */}
           <Text as="h5" fontSize="md" marginTop="4" fontWeight="normal">
             {currentJob?.description}
           </Text>
-          {/* </Text> */}
         </Box>
         {error && (
           <Box mb={4}>

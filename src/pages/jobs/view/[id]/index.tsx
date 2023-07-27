@@ -8,14 +8,8 @@ import {
   Button,
   Flex,
   Center,
-  Stack,
-  Avatar,
-  Divider,
-  ButtonGroup,
-  CardFooter,
-  Icon,
+  Stack, Divider
 } from '@chakra-ui/react';
-import { FiTrash } from 'react-icons/fi';
 import { getJobById } from 'apiSdk/jobs';
 import { Error } from 'components/error';
 import { JobInterface } from 'interfaces/job';
@@ -35,6 +29,7 @@ import { getUsers } from 'apiSdk/users';
 import { UserInterface } from 'interfaces/user';
 import { ApplicationInterface } from 'interfaces/application';
 import Link from 'next/link';
+import JobCardView from 'components/job/JobCardView';
 
 function JobViewPage() {
   const { hasAccess } = useAuthorizationApi();
@@ -109,7 +104,6 @@ function JobViewPage() {
   };
   const submitted = applications?.findIndex((app) => app?.job_id === id) !== -1;
 
-
   return (
     <AppLayout>
       <Card bg="white" p={8} rounded="md" shadow="md">
@@ -158,55 +152,14 @@ function JobViewPage() {
 
                     {data?.application?.map((record) => (
                       <Link href={`/jobs/details/${record.id}`} key={record.id}>
-                        <Card variant="outline" borderWidth="1px" borderRadius="md" p={4}>
-                          <Flex alignItems="center">
-                            <Avatar src={record.user?.profileImage} mr={4} />
-                            <Box flex="1">
-                              <Text fontSize="lg" fontWeight="bold">
-                                {userNames[record.user_id].userFirstName} {userNames[record.user_id].userLastName}
-                              </Text>
-                              <Text as="span" color={'gray.500'} lineHeight="1">
-                                {userNames[record.user_id].userEmail}
-                              </Text>
-                            </Box>
-                          </Flex>
-                          <Flex>
-                            <Text color="gray.600" mt={4} ml={12} fontWeight="medium">
-                              Cover Letter:
-                            </Text>
-                            <Text color="gray.600" fontWeight="normal" mt={4} ml={2} noOfLines={2}>
-                              {record.coverLetter}
-                            </Text>
-                          </Flex>
-
-                          <Divider color="gray.200" mt={4} mb={2} />
-                          <CardFooter>
-                            <ButtonGroup spacing="3">
-                              {hasAccess('application', AccessOperationEnum.UPDATE, AccessServiceEnum.PROJECT) &&
-                                record.status !== 'Rejected' && (
-                                  <Button
-                                    isDisabled={record.status === 'Hired'}
-                                    colorScheme="primary"
-                                    onClick={() => handleHire(record)}
-                                  >
-                                    {record.status === 'Hired' ? 'Hired' : 'Hire'}
-                                  </Button>
-                                )}
-                              {hasAccess('application', AccessOperationEnum.DELETE, AccessServiceEnum.PROJECT) &&
-                                record.status !== 'Hired' && (
-                                  <Button
-                                    isDisabled={record.status === 'Rejected'}
-                                    leftIcon={<Icon as={FiTrash} />}
-                                    onClick={() => applicationHandleReject(record.id, record)}
-                                    variant="outline"
-                                    colorScheme="red"
-                                  >
-                                    {record.status === 'Rejected' ? 'Rejected' : 'Reject'}
-                                  </Button>
-                                )}
-                            </ButtonGroup>
-                          </CardFooter>
-                        </Card>
+                        <JobCardView
+                          key={record.id}
+                          application={record}
+                          profileImage={record.user.profileImage}
+                          userNames={userNames}
+                          onReject={applicationHandleReject}
+                          onHire={handleHire}
+                        />
                       </Link>
                     ))}
                   </Stack>

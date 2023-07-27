@@ -4,21 +4,13 @@ import NextLink from 'next/link';
 import {
   Box,
   Text,
-  Button,
-  Link,
-  Flex,
-  Center,
-  ButtonGroup,
-  Divider,
-  Stack,
-  InputGroup,
+  Button, Flex,
+  Center, InputGroup,
   InputRightAddon,
-  Input,
-  Icon,
+  Input
 } from '@chakra-ui/react';
 import useSWR from 'swr';
 import { Spinner } from '@chakra-ui/react';
-import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
 import { getJobs, deleteJobById, searchJobs } from 'apiSdk/jobs';
 import { JobInterface } from 'interfaces/job';
 import { Error } from 'components/error';
@@ -31,10 +23,10 @@ import {
   useSession,
 } from '@roq/nextjs';
 import { useRouter } from 'next/router';
-import { FiTrash2 } from 'react-icons/fi';
 import { compose } from 'lib/compose';
 import { ApplicationInterface } from 'interfaces/application';
 import { getApplications } from 'apiSdk/applications';
+import JobCard from 'components/job/JobCard';
 
 function JobListPage() {
   const { hasAccess } = useAuthorizationApi();
@@ -107,16 +99,6 @@ function JobListPage() {
     }
   };
 
-  const formatDateTime = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    };
-    return new Date(dateString).toLocaleString(undefined, options);
-  };
   return (
     <AppLayout>
       <Box bg="white" p={4} rounded="md" shadow="md">
@@ -159,7 +141,6 @@ function JobListPage() {
                 <Input placeholder="Search..." value={query} onChange={(e) => setQuery(e.target.value)} onKeyPress={handleKeyPress} />
                 <InputRightAddon
                   bgColor="primary.500"
-                  // eslint-disable-next-line react/no-children-prop
                   children={
                     <Button colorScheme="primary" size="sm" onClick={() => mutate(searchFromBE(query), false)}>
                       Search
@@ -168,61 +149,16 @@ function JobListPage() {
                 />
               </InputGroup>
             </form>
-
             {data?.map((record) => {
-              const submitted = applications?.findIndex((app) => app?.job_id === record?.id) !== -1;
               return (
-                <Card mt={4} onClick={() => handleView(record.id)} key={record.id} variant={'outline'} cursor="pointer">
-                  <CardHeader>
-                    <Text fontSize="xl" fontWeight="bold">
-                      {record.title} - {record.company?.name}
-                    </Text>
-                  </CardHeader>
-                  <CardBody py={2}>
-                    <Text noOfLines={3}>{record.description}</Text>
-                  </CardBody>
-                  <CardBody pb={2}>
-                    <Text fontSize="sm" color="gray.600">
-                      Posted on {formatDateTime(record.created_at)}
-                    </Text>
-                  </CardBody>
-                  <Divider color={'gray.200'} />
-                  <CardFooter>
-                    <ButtonGroup spacing="2" justifyContent="space-between" display="flex" width="100%">
-                      <Stack direction="row">
-                        {hasAccess('job', AccessOperationEnum.UPDATE, AccessServiceEnum.PROJECT) && (
-                          <NextLink href={`/jobs/view/${record.id}`} passHref>
-                            <Button variant="solid" colorScheme="primary">
-                              View Applicants ({record?._count?.application ?? 0})
-                            </Button>
-                          </NextLink>
-                        )}
-
-                        {hasAccess('job', AccessOperationEnum.READ, AccessServiceEnum.PROJECT) &&
-                          currentRole === 'job-applicant' && (
-                            <Link href={`/applications/create/?job_id=${record.id}`}>
-                              <Button isDisabled={submitted} variant="solid" colorScheme="primary">
-                                {submitted ? 'Submitted' : 'Apply Now'}
-                              </Button>
-                            </Link>
-                          )}
-                      </Stack>
-                      {hasAccess('job', AccessOperationEnum.DELETE, AccessServiceEnum.PROJECT) && (
-                        <Button
-                          variant="outline"
-                          colorScheme="red"
-                          leftIcon={<Icon as={FiTrash2} />}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDelete(record.id);
-                          }}
-                        >
-                          Delete
-                        </Button>
-                      )}
-                    </ButtonGroup>
-                  </CardFooter>
-                </Card>
+                <JobCard
+                  key={record.id}
+                  record={record}
+                  applications={applications}
+                  currentRole={currentRole}
+                  handleView={handleView}
+                  handleDelete={handleDelete}
+                />
               );
             })}
           </>
