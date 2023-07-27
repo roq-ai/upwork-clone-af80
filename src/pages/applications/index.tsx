@@ -54,21 +54,7 @@ function ApplicationListPage() {
 
   const [deleteError, setDeleteError] = useState(null);
 
-  // const handleDelete = async (id: string) => {
-  //   setDeleteError(null);
-  //   try {
-  //     await deleteApplicationById(id);
-  //     await mutate();
-  //   } catch (error) {
-  //     setDeleteError(error);
-  //   }
-  // };
-
   const [expandedApplication, setExpandedApplication] = useState<string | null>(null);
-
-  const handleToggleDetails = (applicationId: string) => {
-    setExpandedApplication((prevId) => (prevId === applicationId ? null : applicationId));
-  };
 
   type Status = 'Hired' | 'Rejected' | 'Submitted';
 
@@ -106,9 +92,9 @@ function ApplicationListPage() {
         ) : (
           <Box>
             {data?.map((record) => (
-              <Link href={`/applications/details/${record.id}`} key={record.id}>
+              <Link href={`/applications/details/${record.id}`} key={record.id} cursor='pointer' >
                 <Box mt={4}>
-                  <Card p={4} border="1px solid" borderColor="gray.200" borderRadius="md" boxShadow="lg">
+                  <Card p={4} border="1px solid" borderColor="gray.200" borderRadius="md" boxShadow="lg" textDecoration='none'>
                     <CardHeader>
                       <Text fontSize="xl" fontWeight="bold">
                         {record.job?.title}

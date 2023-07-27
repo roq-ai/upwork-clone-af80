@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 import AppLayout from 'layout/app-layout';
 import NextLink from 'next/link';
 import {
@@ -86,8 +86,26 @@ function JobListPage() {
       router.push(`/jobs/view/${id}`);
     }
   };
+  const handleKeyPress = async (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      try {
+        const searchData = await searchFromBE(query);
+        mutate(searchData, false);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
-  const handleSearch = () => {};
+  const handleSearch = async () => {
+    try {
+      const searchData = await searchFromBE(query);
+      search(searchData, false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const formatDateTime = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -130,18 +148,26 @@ function JobListPage() {
           </Center>
         ) : (
           <>
-            <InputGroup>
-              <Input placeholder="Search..." value={query} onChange={(e) => setQuery(e.target.value)} />
-              <InputRightAddon
-                bgColor="primary.500"
-                // eslint-disable-next-line react/no-children-prop
-                children={
-                  <Button colorScheme="primary" size="sm" onClick={() => mutate(searchFromBE(query), false)}>
-                    Search
-                  </Button>
-                }
-              />
-            </InputGroup>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSearch();
+              }}
+            >
+
+              <InputGroup>
+                <Input placeholder="Search..." value={query} onChange={(e) => setQuery(e.target.value)} onKeyPress={handleKeyPress} />
+                <InputRightAddon
+                  bgColor="primary.500"
+                  // eslint-disable-next-line react/no-children-prop
+                  children={
+                    <Button colorScheme="primary" size="sm" onClick={() => mutate(searchFromBE(query), false)}>
+                      Search
+                    </Button>
+                  }
+                />
+              </InputGroup>
+            </form>
 
             {data?.map((record) => {
               const submitted = applications?.findIndex((app) => app?.job_id === record?.id) !== -1;
