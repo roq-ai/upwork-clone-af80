@@ -155,7 +155,7 @@ function JobViewPage() {
                         <JobCardView
                           key={record.id}
                           application={record}
-                          profileImage={record.user.profileImage}
+                          profileImage={record.user?.profileImage}
                           userNames={userNames}
                           onReject={applicationHandleReject}
                           onHire={handleHire}
