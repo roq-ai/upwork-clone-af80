@@ -1,14 +1,7 @@
 import { KeyboardEvent, useState } from 'react';
 import AppLayout from 'layout/app-layout';
 import NextLink from 'next/link';
-import {
-  Box,
-  Text,
-  Button, Flex,
-  Center, InputGroup,
-  InputRightAddon,
-  Input
-} from '@chakra-ui/react';
+import { Box, Text, Button, Flex, Center, InputGroup, InputRightAddon, Input } from '@chakra-ui/react';
 import useSWR from 'swr';
 import { Spinner } from '@chakra-ui/react';
 import { getJobs, deleteJobById, searchJobs } from 'apiSdk/jobs';
@@ -136,17 +129,18 @@ function JobListPage() {
                 handleSearch();
               }}
             >
-
               <InputGroup>
-                <Input placeholder="Search..." value={query} onChange={(e) => setQuery(e.target.value)} onKeyPress={handleKeyPress} />
-                <InputRightAddon
-                  bgColor="primary.500"
-                  children={
-                    <Button colorScheme="primary" size="sm" onClick={() => mutate(searchFromBE(query), false)}>
-                      Search
-                    </Button>
-                  }
+                <Input
+                  placeholder="Search..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyPress={handleKeyPress}
                 />
+                <InputRightAddon bgColor="primary.500">
+                  <Button colorScheme="primary" size="sm" onClick={() => mutate(searchFromBE(query), false)}>
+                    Search
+                  </Button>
+                </InputRightAddon>
               </InputGroup>
             </form>
             {data?.map((record) => {

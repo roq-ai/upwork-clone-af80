@@ -36,6 +36,7 @@ function ApplicationDetailPage() {
       return 'yellow';
     }
   };
+
   const handleDownloadAttachment = (attachmentUrl: string) => {
     const link = document.createElement('a');
     link.href = attachmentUrl;
@@ -45,9 +46,10 @@ function ApplicationDetailPage() {
     link.click();
     document.body.removeChild(link);
   };
+
   function AttachementFileName(input: string) {
-    const slash = input.split('/')
-    return slash[slash.length - 1]
+    const slash = input.split('/');
+    return slash[slash.length - 1];
   }
   return (
     <AppLayout>
@@ -79,6 +81,7 @@ function ApplicationDetailPage() {
                   <Text fontSize="xl" fontWeight="bold">
                     {data.job?.title}
                   </Text>
+                  <Text>{data.job?.company?.name}</Text>
                 </CardHeader>
                 <CardBody>
                   <Text fontSize="md" fontWeight="medium">
@@ -92,7 +95,7 @@ function ApplicationDetailPage() {
                   <Text fontSize="md" fontWeight="medium">
                     Cover Letter
                   </Text>
-                  <Text py={2} fontSize="sm" color="gray.600" >
+                  <Text py={2} fontSize="sm" color="gray.600">
                     {data.coverLetter}
                   </Text>
                 </CardBody>
@@ -135,16 +138,9 @@ function ApplicationDetailPage() {
                                 md: 'row',
                               }}
                             >
-                              <Button
-                                variant="secondary"
-                                onClick={() => handleDownloadAttachment(data.attachement)}
-                              >
+                              <Button variant="secondary" onClick={() => handleDownloadAttachment(data.attachement)}>
                                 <Icon as={FiDownload} mr="2" />
                                 Download
-                              </Button>
-                              <Button variant="primary">
-                                <Icon as={FiEdit3} mr="2" />
-                                View
                               </Button>
                             </Stack>
                           </Stack>

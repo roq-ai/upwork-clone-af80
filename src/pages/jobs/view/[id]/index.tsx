@@ -72,7 +72,7 @@ function JobViewPage() {
   data?.application.map((app) => {
     const applicant = userData?.find((user) => user.id === app?.user_id);
     userNames[app.user_id] = {
-      // profileImage:applicant?.
+      profileImage:applicant?.profileImage,
       userFirstName: applicant?.firstName,
       userLastName: applicant?.lastName,
       userEmail: applicant?.email,
@@ -91,7 +91,6 @@ function JobViewPage() {
 
   const handleHire = async (application: ApplicationInterface) => {
     setDeleteError(null);
-
     try {
       await updateApplicationById(application.id, {
         ...application,
