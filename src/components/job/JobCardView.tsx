@@ -27,7 +27,7 @@ function JobCardView({ application, userNames, onReject, onHire, profileImage }:
         <Avatar src={profileImage} mr={4} />
         <Box flex="1">
           <Text fontSize="lg" fontWeight="bold">
-            Beshir Dekebo
+            {userNames[user_id]?.userFirstName}
           </Text>
           <Text as="span" color={'gray.500'} lineHeight="1">
             {userNames[user_id]?.userEmail}

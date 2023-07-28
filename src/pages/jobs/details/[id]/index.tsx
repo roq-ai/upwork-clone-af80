@@ -98,8 +98,8 @@ function JobDetailPage() {
     }
   };
   function AttachementFileName(input: string) {
-    const slash = input.split('/')
-    return slash[slash.length - 1]
+    const slash = input.split('/');
+    return slash[slash.length - 1];
   }
 
   return (
@@ -138,7 +138,7 @@ function JobDetailPage() {
                         <Avatar src={data.user?.profileImage} mr={4} />
                         <Box flex="1">
                           <Text fontSize="lg" fontWeight="bold">
-                            {data.user.firstName ?? 'Beshir'} {data.user.lastName ?? 'Dekebo'}
+                            {data.user.firstName ?? 'Test'} {data.user.lastName ?? 'User'}
                           </Text>
                           <Text as="span" color={'gray.500'} lineHeight="1">
                             {data.user.email ?? 'Unknown'}
