@@ -194,10 +194,6 @@ function JobDetailPage() {
                                       <Icon as={FiDownload} mr="2" />
                                       Download
                                     </Button>
-                                    <Button variant="primary">
-                                      <Icon as={FiEdit3} mr="2" />
-                                      View
-                                    </Button>
                                   </Stack>
                                 </Stack>
                               </Box>

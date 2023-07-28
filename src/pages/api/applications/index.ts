@@ -36,7 +36,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const company = await prisma.company.findFirst({ where: { id: body.company_id } });
     const companyUsers = await roqClient.asSuperAdmin().users({ filter: { tenantId: { equalTo: company.tenant_id } } });
     const usersId = companyUsers.users.data.map((user) => user.id);
-
+    // console.log({usersId});
+    
     const conversationId = await roqClient.asUser(roqUserId).createConversation({
       conversation: {
         title: job.title,
@@ -54,7 +55,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
         data: [
           { key: 'title', value: job.title },
-          { key: 'jobUrl', value: `/jobs/view/${job.id}` },
+          // { key: 'jobUrl', value: `/jobs/view/${job.id}` },
         ],
       },
     });

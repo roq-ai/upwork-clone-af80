@@ -108,7 +108,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     { name: 'Manage Team', icon: FiMail, path: '/invites', entity: RoqResourceEnum.INVITE },
     { name: 'Chat', icon: FiMessageCircle, path: '/chat', entity: RoqResourceEnum.CONVERSATION },
     {
-      name: isJobPoster ? 'My Job Listings' : 'Job Feed',
+      name: isJobPoster ? 'My Job Listings' : 'Job Feeds',
       path: '/jobs',
       entity: 'job',
       service: AccessServiceEnum.PROJECT,
