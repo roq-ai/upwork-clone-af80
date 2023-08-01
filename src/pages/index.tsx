@@ -34,7 +34,7 @@ function HomePage() {
                   position: 'absolute',
                   bottom: 1,
                   left: 0,
-                  bg: 'cyan.400',
+                  bg: 'lightgreen',
                   zIndex: -1,
                 }}
               >
@@ -49,10 +49,10 @@ function HomePage() {
               <Stack className="owner-roles-container" direction={{ base: 'column', md: 'row' }} spacing={4}>
                 <Button
                   rounded={'full'}
-                  bg={'cyan.500'}
+                  colorScheme="primary"
                   color={'white'}
                   _hover={{
-                    bg: 'cyan.700',
+                    bg: 'green',
                   }}
                   onClick={() => signUp('job-poster')}
                 >
@@ -67,10 +67,10 @@ function HomePage() {
               <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
                 <Button
                   rounded={'full'}
-                  bg={'cyan.500'}
+                  colorScheme="primary"
                   color={'white'}
                   _hover={{
-                    bg: 'cyan.700',
+                    bg: 'green',
                   }}
                   onClick={() => signUp('job-applicant')}
                 >
@@ -117,5 +117,5 @@ function HomePage() {
 
 export default requireNextAuth({
   redirectIfAuthenticated: true,
-  redirectTo: '/users',
+  redirectTo: '/jobs',
 })(HomePage);

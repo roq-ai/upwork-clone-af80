@@ -15,6 +15,8 @@ import {
   NumberInputField,
   NumberIncrementStepper,
   NumberInput,
+  Textarea,
+  Stack,
 } from '@chakra-ui/react';
 import { useFormik, FormikHelpers } from 'formik';
 import * as yup from 'yup';
@@ -26,22 +28,60 @@ import { Error } from 'components/error';
 import { applicationValidationSchema } from 'validationSchema/applications';
 import { AsyncSelect } from 'components/async-select';
 import { ArrayFormField } from 'components/array-form-field';
-import { AccessOperationEnum, AccessServiceEnum, requireNextAuth, withAuthorization } from '@roq/nextjs';
+import { AccessOperationEnum, AccessServiceEnum, requireNextAuth, useSession, withAuthorization } from '@roq/nextjs';
 import { compose } from 'lib/compose';
 import { JobInterface } from 'interfaces/job';
 import { UserInterface } from 'interfaces/user';
-import { getJobs } from 'apiSdk/jobs';
+import { getJobById, getJobs } from 'apiSdk/jobs';
 import { getUsers } from 'apiSdk/users';
 import { ApplicationInterface } from 'interfaces/application';
+import useSWR from 'swr';
+import { FileUpload } from '@roq/nextjs';
 
 function ApplicationCreatePage() {
   const router = useRouter();
   const [error, setError] = useState(null);
-
-  const handleSubmit = async (values: ApplicationInterface, { resetForm }: FormikHelpers<any>) => {
+  const [attachement, setAttachement] = useState('');
+  const { session } = useSession();
+  // console.log({session});
+  
+  const {
+    data: currentUser,
+    isLoading,
+    mutate,
+  } = useSWR<UserInterface[]>(
+    () => '/users',
+    () =>
+      getUsers({
+        email: session?.user?.email,
+      }),
+  );
+  const currentId = router.query.job_id as string;
+  const {
+    data: currentJob,
+    error: jobError,
+    isLoading: jobLoading,
+    mutate: jobMutate,
+  } = useSWR<JobInterface>(
+    () => (currentId ? `/jobs/${currentId}` : null),
+    () =>
+      getJobById(currentId, {
+        relations: ['company', 'application'],
+      }),
+  );
+  // console.log({ currentUser });
+  const handleSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {
     setError(null);
     try {
-      await createApplication(values);
+      await createApplication({
+        ...values,
+        attachement: attachement,
+        job_id: values.job_id,
+        status: 'submitted',
+        user_id: currentUser?.[0].id,
+      });
+      // await hire({ jobTitle: currentJob.title, userId:currentJob.company.user_id, applicantId: user?.[0].id });
+    
       resetForm();
       router.push('/applications');
     } catch (error) {
@@ -49,11 +89,11 @@ function ApplicationCreatePage() {
     }
   };
 
-  const formik = useFormik<ApplicationInterface>({
+  const formik = useFormik({
     initialValues: {
-      status: '',
+      coverLetter: '',
       job_id: (router.query.job_id as string) ?? null,
-      user_id: (router.query.user_id as string) ?? null,
+      attachement: '',
     },
     validationSchema: applicationValidationSchema,
     onSubmit: handleSubmit,
@@ -62,13 +102,28 @@ function ApplicationCreatePage() {
     validateOnBlur: false,
   });
 
+
   return (
     <AppLayout>
-      <Box bg="white" p={4} rounded="md" shadow="md">
+      <Box bg="white" p={8} rounded="md" shadow="md">
         <Box mb={4}>
           <Text as="h1" fontSize="2xl" fontWeight="bold">
-            Create Application
+            Apply For {currentJob?.title}
           </Text>
+        </Box>
+        <Box mb={4}>
+          {/* <Text as="h4" fontSize="sm" fontWeight="bold">
+            Job Title: */}
+          <Text as="h3" fontSize="lg" fontWeight="normal">
+            {currentJob?.title}
+          </Text>
+          {/* </Text> */}
+          {/* <Text as="h5" fontSize="sm" fontWeight="bold">
+            Job Description:{' '} */}
+          <Text as="h5" fontSize="md" marginTop="4" fontWeight="normal">
+            {currentJob?.description}
+          </Text>
+          {/* </Text> */}
         </Box>
         {error && (
           <Box mb={4}>
@@ -76,38 +131,27 @@ function ApplicationCreatePage() {
           </Box>
         )}
         <form onSubmit={formik.handleSubmit}>
-          <FormControl id="status" mb="4" isInvalid={!!formik.errors?.status}>
-            <FormLabel>Status</FormLabel>
-            <Input type="text" name="status" value={formik.values?.status} onChange={formik.handleChange} />
-            {formik.errors.status && <FormErrorMessage>{formik.errors?.status}</FormErrorMessage>}
+          <FormControl id="status" mb="4" isInvalid={!!formik.errors?.coverLetter}>
+            <FormLabel>Cover letter</FormLabel>
+            <Textarea name="coverLetter" value={formik.values?.coverLetter} onChange={formik.handleChange} />
+            {formik.errors.coverLetter && <FormErrorMessage>{formik.errors?.coverLetter}</FormErrorMessage>}
           </FormControl>
-          <AsyncSelect<JobInterface>
-            formik={formik}
-            name={'job_id'}
-            label={'Select Job'}
-            placeholder={'Select Job'}
-            fetcher={getJobs}
-            renderOption={(record) => (
-              <option key={record.id} value={record.id}>
-                {record?.title}
-              </option>
-            )}
-          />
-          <AsyncSelect<UserInterface>
-            formik={formik}
-            name={'user_id'}
-            label={'Select User'}
-            placeholder={'Select User'}
-            fetcher={getUsers}
-            renderOption={(record) => (
-              <option key={record.id} value={record.id}>
-                {record?.email}
-              </option>
-            )}
-          />
-          <Button isDisabled={formik?.isSubmitting} colorScheme="blue" type="submit" mr="4">
-            Submit
-          </Button>
+          <Box my={4}>
+            <FileUpload
+              accept={['image/*']}
+              fileCategory="USER_FILES"
+              onUploadSuccess={({ url, id, ...rest }) => {
+                setAttachement(url);
+                formik.setFieldValue('attachement', url);
+              }}
+            />
+            {formik.errors.attachement && <FormErrorMessage>{formik.errors?.attachement}</FormErrorMessage>}
+          </Box>
+          <Stack direction="row" justifyContent={'end'}>
+            <Button isDisabled={formik?.isSubmitting || !currentUser} colorScheme="primary" type="submit" mr="4">
+              Submit
+            </Button>
+          </Stack>
         </form>
       </Box>
     </AppLayout>

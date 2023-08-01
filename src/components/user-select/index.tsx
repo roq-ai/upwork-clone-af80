@@ -17,7 +17,7 @@ export function UserSelect({ name, value, handleChange }: AsyncSelectPropsInterf
     if (data && data.length === 1 && !value) {
       handleChange(data[0].id);
     }
-  }, [data]);
+  }, [data, handleChange, value]);
   return (
     <>
       {error && <Error error={error} />}

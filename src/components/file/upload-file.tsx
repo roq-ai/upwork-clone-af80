@@ -45,7 +45,7 @@ export default function UploadFile({ onSuccess, onDelete }: UploadFileProps) {
       {/* Display the file selector button */}
       <FileDropzone fileUploader={fileUploader} accept={['image/*']} fileCategory="USER_FILES" />{' '}
       {/* Images can be previewed using the previews property of the file uploader object */}
-      {newFile ? <Image mb={5} w={'350px'} borderRadius={5} src={fileUploader.previews?.[0]?.url} /> : <></>}
+      {newFile ? <Image alt='' mb={5} w={'350px'} borderRadius={5} src={fileUploader.previews?.[0]?.url} /> : <></>}
       {newFile ? (
         <Button bgColor={'cyan.500'} color="white" disabled={!newFile} onClick={handleUpload} w="fit-content">
           Start upload

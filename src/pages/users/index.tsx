@@ -14,6 +14,7 @@ function UserListPage() {
     () => '/users',
     () => getUsers(),
   );
+
   const router = useRouter();
   return (
     <AppLayout>
@@ -58,7 +59,6 @@ function UserListPage() {
     </AppLayout>
   );
 }
-
 export default withAuthorization({
   service: AccessServiceEnum.PROJECT,
   entity: 'user',

@@ -15,6 +15,7 @@ import {
   NumberInputField,
   NumberIncrementStepper,
   NumberInput,
+  Textarea,
 } from '@chakra-ui/react';
 import { useFormik, FormikHelpers } from 'formik';
 import * as yup from 'yup';
@@ -26,20 +27,34 @@ import { Error } from 'components/error';
 import { jobValidationSchema } from 'validationSchema/jobs';
 import { AsyncSelect } from 'components/async-select';
 import { ArrayFormField } from 'components/array-form-field';
-import { AccessOperationEnum, AccessServiceEnum, requireNextAuth, withAuthorization } from '@roq/nextjs';
+import { AccessOperationEnum, AccessServiceEnum, requireNextAuth, useSession, withAuthorization } from '@roq/nextjs';
 import { compose } from 'lib/compose';
 import { CompanyInterface } from 'interfaces/company';
 import { getCompanies } from 'apiSdk/companies';
 import { JobInterface } from 'interfaces/job';
+import useSWR from 'swr';
 
 function JobCreatePage() {
   const router = useRouter();
   const [error, setError] = useState(null);
+  const session = useSession();
 
-  const handleSubmit = async (values: JobInterface, { resetForm }: FormikHelpers<any>) => {
+  const {
+    data: company,
+    isLoading,
+    mutate,
+  } = useSWR<JobInterface[]>(
+    () => '/company',
+    () =>
+      getCompanies({
+        tenant_id: session?.session.user.tenantId,
+      }),
+  );
+
+  const handleSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {
     setError(null);
     try {
-      await createJob(values);
+      await createJob({ ...values, company_id: company?.[0].id });
       resetForm();
       router.push('/jobs');
     } catch (error) {
@@ -47,11 +62,10 @@ function JobCreatePage() {
     }
   };
 
-  const formik = useFormik<JobInterface>({
+  const formik = useFormik({
     initialValues: {
       title: '',
       description: '',
-      company_id: (router.query.company_id as string) ?? null,
     },
     validationSchema: jobValidationSchema,
     onSubmit: handleSubmit,
@@ -59,7 +73,6 @@ function JobCreatePage() {
     validateOnChange: false,
     validateOnBlur: false,
   });
-
   return (
     <AppLayout>
       <Box bg="white" p={4} rounded="md" shadow="md">
@@ -81,22 +94,11 @@ function JobCreatePage() {
           </FormControl>
           <FormControl id="description" mb="4" isInvalid={!!formik.errors?.description}>
             <FormLabel>Description</FormLabel>
-            <Input type="text" name="description" value={formik.values?.description} onChange={formik.handleChange} />
+            <Textarea name="description" value={formik.values?.description} onChange={formik.handleChange} />
             {formik.errors.description && <FormErrorMessage>{formik.errors?.description}</FormErrorMessage>}
           </FormControl>
-          <AsyncSelect<CompanyInterface>
-            formik={formik}
-            name={'company_id'}
-            label={'Select Company'}
-            placeholder={'Select Company'}
-            fetcher={getCompanies}
-            renderOption={(record) => (
-              <option key={record.id} value={record.id}>
-                {record?.name}
-              </option>
-            )}
-          />
-          <Button isDisabled={formik?.isSubmitting} colorScheme="blue" type="submit" mr="4">
+
+          <Button isDisabled={formik?.isSubmitting} colorScheme="primary" type="submit" mr="4">
             Submit
           </Button>
         </form>

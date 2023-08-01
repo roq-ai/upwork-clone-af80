@@ -24,7 +24,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         tenantId: user.tenantId,
         roles: user.roles,
       })
-      .findMany(convertQueryToPrismaUtil(req.query, 'application'));
+      .findMany({ ...convertQueryToPrismaUtil(req.query, 'application'), orderBy: { created_at: 'desc' } });
     return res.status(200).json(data);
   }
 
@@ -32,9 +32,37 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     await applicationValidationSchema.validate(req.body);
     const body = { ...req.body };
 
-    const data = await prisma.application.create({
-      data: body,
+    const job = await prisma.job.findFirst({ where: { id: body.job_id }, include: { company: true } });
+    const company = await prisma.company.findFirst({ where: { id: body.company_id } });
+    const companyUsers = await roqClient.asSuperAdmin().users({ filter: { tenantId: { equalTo: company.tenant_id } } });
+    const usersId = companyUsers.users.data.map((user) => user.id);
+
+    const conversationId = await roqClient.asUser(roqUserId).createConversation({
+      conversation: {
+        title: job.title,
+        ownerId: roqUserId,
+        memberIds: [roqUserId, ...usersId],
+        isGroup: true,
+      },
     });
+
+    await roqClient.asSuperAdmin().notify({
+      notification: {
+        key: 'application',
+        recipients: {
+          userIds: [...usersId],
+        },
+        data: [
+          { key: 'title', value: job.title },
+          { key: 'jobUrl', value: `/jobs/view/${job.id}` },
+        ],
+      },
+    });
+
+    const data = await prisma.application.create({
+      data: { ...body, roqConversationId: conversationId.createConversation.id },
+    });
+
     return res.status(200).json(data);
   }
 }

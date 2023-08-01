@@ -26,7 +26,7 @@ export function AsyncSelect<T>({
     if (data && data.length === 1 && !get(formik.values, name)) {
       formik.setFieldValue(name, (data[0] as any).id);
     }
-  }, [data]);
+  }, [data, formik, name]);
   return (
     <>
       {error && <Error error={error} />}

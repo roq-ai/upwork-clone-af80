@@ -16,6 +16,7 @@ import {
   NumberIncrementStepper,
   NumberInput,
   Center,
+  Textarea,
 } from '@chakra-ui/react';
 import * as yup from 'yup';
 import DatePicker from 'react-datepicker';
@@ -43,7 +44,7 @@ function JobEditPage() {
   );
   const [formError, setFormError] = useState(null);
 
-  const handleSubmit = async (values: JobInterface, { resetForm }: FormikHelpers<any>) => {
+  const handleSubmit = async (values: any, { resetForm }: FormikHelpers<any>) => {
     setFormError(null);
     try {
       const updated = await updateJobById(id, values);
@@ -95,21 +96,9 @@ function JobEditPage() {
             </FormControl>
             <FormControl id="description" mb="4" isInvalid={!!formik.errors?.description}>
               <FormLabel>Description</FormLabel>
-              <Input type="text" name="description" value={formik.values?.description} onChange={formik.handleChange} />
+              <Textarea name="description" value={formik.values?.description} onChange={formik.handleChange} />
               {formik.errors.description && <FormErrorMessage>{formik.errors?.description}</FormErrorMessage>}
             </FormControl>
-            <AsyncSelect<CompanyInterface>
-              formik={formik}
-              name={'company_id'}
-              label={'Select Company'}
-              placeholder={'Select Company'}
-              fetcher={getCompanies}
-              renderOption={(record) => (
-                <option key={record.id} value={record.id}>
-                  {record?.name}
-                </option>
-              )}
-            />
             <Button isDisabled={formik?.isSubmitting} colorScheme="blue" type="submit" mr="4">
               Submit
             </Button>

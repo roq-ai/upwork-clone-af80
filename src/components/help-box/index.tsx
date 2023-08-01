@@ -96,9 +96,13 @@ function isFirstVisit() {
 }
 
 export const HelpBox: React.FC = () => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const ownerRoles: string[] = ['Job Poster'];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const customerRoles: string[] = ['Job Applicant'];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const tenantRoles: string[] = ['Job Poster', 'Client'];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const addOns: string[] = ['chat', 'notifications', 'file'];
   const applicationName = `Upwork-clone`;
   const tenantName = `Company`;
@@ -261,7 +265,7 @@ export const HelpBox: React.FC = () => {
               target: 'body',
             },
           ],
-    [session?.roqUserId],
+    [addOns, applicationName, customerRoles, githubUrl, ownerRoles, session?.roqUserId, tenantName, tenantRoles],
   );
 
   const [run, setRun] = useState(false);

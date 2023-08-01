@@ -2,6 +2,7 @@ import axios from 'axios';
 import queryString from 'query-string';
 import { ApplicationInterface, ApplicationGetQueryInterface } from 'interfaces/application';
 import { GetQueryInterface } from '../../interfaces';
+import { roqClient } from 'server/roq';
 
 export const getApplications = async (query?: ApplicationGetQueryInterface) => {
   const response = await axios.get(`/api/applications${query ? `?${queryString.stringify(query)}` : ''}`);
