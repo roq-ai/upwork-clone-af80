@@ -41,16 +41,11 @@ function ApplicationDetailPage() {
     const link = document.createElement('a');
     link.href = attachmentUrl;
     link.target = '_blank';
-    link.download = 'attachment.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  function AttachementFileName(input: string) {
-    const slash = input.split('/');
-    return slash[slash.length - 1];
-  }
   return (
     <AppLayout>
       <Box bg="white" p={4} rounded="md" shadow="md">
@@ -79,16 +74,16 @@ function ApplicationDetailPage() {
               <Card p={4} border="1px solid" borderColor="gray.200" borderRadius="md" boxShadow="lg">
                 <CardHeader>
                   <Text fontSize="xl" fontWeight="bold">
-                    {data.job?.title}
+                    {data?.job?.title}
                   </Text>
-                  <Text>{data.job?.company?.name}</Text>
+                  <Text>{data?.job?.company?.name}</Text>
                 </CardHeader>
                 <CardBody>
                   <Text fontSize="md" fontWeight="medium">
                     Job Description
                   </Text>
                   <Text py={2} fontSize="sm" color="gray.600">
-                    {data.job.description}
+                    {data?.job?.description}
                   </Text>
                 </CardBody>
                 <CardBody>
@@ -96,13 +91,13 @@ function ApplicationDetailPage() {
                     Cover Letter
                   </Text>
                   <Text py={2} fontSize="sm" color="gray.600">
-                    {data.coverLetter}
+                    {data?.coverLetter}
                   </Text>
                 </CardBody>
                 <Divider color="gray.200" mt={2} />
                 <CardFooter mt={2}>
-                  <Badge colorScheme={getButtonColor(data.status as Status)} px={2} py={1} borderRadius="md">
-                    {data.status}
+                  <Badge colorScheme={getButtonColor(data?.status as Status)} px={2} py={1} borderRadius="md">
+                    {data?.status}
                   </Badge>{' '}
                 </CardFooter>
                 {data.attachement && (
@@ -127,7 +122,7 @@ function ApplicationDetailPage() {
                               <Icon as={FiFile} boxSize="5" />
                               <Box fontSize="sm">
                                 <Text color="emphasized" fontWeight="medium">
-                                  {AttachementFileName(data.attachement)}
+                                  {data?.attachementName}
                                 </Text>
                               </Box>
                             </HStack>
@@ -139,8 +134,8 @@ function ApplicationDetailPage() {
                               }}
                             >
                               <Button variant="secondary" onClick={() => handleDownloadAttachment(data.attachement)}>
-                                <Icon as={FiDownload} mr="2" />
-                                Download
+                                <Icon as={FiFile} mr="2" />
+                                Preview
                               </Button>
                             </Stack>
                           </Stack>

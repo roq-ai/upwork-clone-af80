@@ -8,6 +8,7 @@ export interface ApplicationInterface {
   user_id: string;
   status: string;
   attachement: string;
+  attachementName: string;
   roqConversationId: string;
   profileImage: string;
   created_at?: any;

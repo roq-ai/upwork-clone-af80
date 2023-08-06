@@ -1,24 +1,18 @@
 import { useState } from 'react';
 import AppLayout from 'layout/app-layout';
-import {
-  Box,
-  Text, Link, Flex,
-  Center
-} from '@chakra-ui/react';
+import { Box, Text, Link, Flex, Center } from '@chakra-ui/react';
 import useSWR from 'swr';
 import { Spinner } from '@chakra-ui/react';
 import { getApplications } from 'apiSdk/applications';
 import { ApplicationInterface } from 'interfaces/application';
 import { Error } from 'components/error';
-import {
-  AccessOperationEnum,
-  AccessServiceEnum, requireNextAuth,
-  withAuthorization
-} from '@roq/nextjs';
+import { AccessOperationEnum, AccessServiceEnum, requireNextAuth, useSession, withAuthorization } from '@roq/nextjs';
 import { compose } from 'lib/compose';
 import ApplicationCard from 'components/application/ApplicationCard';
 
 function ApplicationListPage() {
+  const session = useSession();
+  console.log(session.session);
   const [deleteError, setDeleteError] = useState(null);
   const { data, error, isLoading, mutate } = useSWR<ApplicationInterface[]>(
     () => '/applications',

@@ -5,6 +5,8 @@ import { authorizationValidationMiddleware, errorHandlerMiddleware } from 'serve
 import { applicationValidationSchema } from 'validationSchema/applications';
 import { convertQueryToPrismaUtil } from 'server/utils';
 import { getServerSession } from '@roq/nextjs';
+import 'dotenv/config'
+import { Platform } from '@roq/nodejs'
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { roqUserId, user } = await getServerSession(req);
@@ -25,6 +27,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         roles: user.roles,
       })
       .findMany({ ...convertQueryToPrismaUtil(req.query, 'application'), orderBy: { created_at: 'desc' } });
+    
     return res.status(200).json(data);
   }
 
@@ -33,10 +36,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const body = { ...req.body };
 
     const job = await prisma.job.findFirst({ where: { id: body.job_id }, include: { company: true } });
-    const company = await prisma.company.findFirst({ where: { id: body.company_id } });
-    const companyUsers = await roqClient.asSuperAdmin().users({ filter: { tenantId: { equalTo: company.tenant_id } } });
+    const companyUsers = await roqClient.asSuperAdmin().users({ filter: { tenantId: { equalTo: job.company.tenant_id } } });
     const usersId = companyUsers.users.data.map((user) => user.id);
-    // console.log({usersId});
     
     const conversationId = await roqClient.asUser(roqUserId).createConversation({
       conversation: {
@@ -46,17 +47,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         isGroup: true,
       },
     });
+    // console.log('userID',usersId)
 
     await roqClient.asSuperAdmin().notify({
       notification: {
-        key: 'application',
+        key: 'applications',
         recipients: {
           userIds: [...usersId],
         },
-        data: [
-          { key: 'title', value: job.title },
-          // { key: 'jobUrl', value: `/jobs/view/${job.id}` },
-        ],
+        // data: [
+        //   { key: 'title', value: job.title },
+        //   // { key: 'jobUrl', value: `/jobs/view/${job.id}` },
+        // ],
       },
     });
 

@@ -8,4 +8,5 @@ export const roqClient = new Platform({
   apiKey: serverConfig.roq.apiKey,
 });
 
+
 export const authorizationClient = new RoqAuthorizationClient(roqClient);
