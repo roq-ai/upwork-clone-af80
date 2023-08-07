@@ -11,8 +11,6 @@ import { compose } from 'lib/compose';
 import ApplicationCard from 'components/application/ApplicationCard';
 
 function ApplicationListPage() {
-  const session = useSession();
-  console.log(session.session);
   const [deleteError, setDeleteError] = useState(null);
   const { data, error, isLoading, mutate } = useSWR<ApplicationInterface[]>(
     () => '/applications',

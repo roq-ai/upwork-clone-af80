@@ -1,12 +1,6 @@
 import AppLayout from 'layout/app-layout';
 import { useState } from 'react';
-import {
-  FormControl,
-  FormLabel, Button,
-  Text,
-  Box, FormErrorMessage, Textarea,
-  Stack
-} from '@chakra-ui/react';
+import { FormControl, FormLabel, Button, Text, Box, FormErrorMessage, Textarea, Stack } from '@chakra-ui/react';
 import { useFormik, FormikHelpers } from 'formik';
 import { useRouter } from 'next/router';
 import { createApplication } from 'apiSdk/applications';
@@ -25,6 +19,7 @@ function ApplicationCreatePage() {
   const router = useRouter();
   const [error, setError] = useState(null);
   const [attachement, setAttachement] = useState('');
+  const [attachementName, setAttachementName] = useState('');
   const { session } = useSession();
 
   const {
@@ -57,6 +52,7 @@ function ApplicationCreatePage() {
       await createApplication({
         ...values,
         attachement: attachement,
+        attachementName: attachementName,
         job_id: values.job_id,
         status: 'submitted',
         user_id: currentUser?.[0].id,
@@ -74,6 +70,7 @@ function ApplicationCreatePage() {
       coverLetter: '',
       job_id: (router.query.job_id as string) ?? null,
       attachement: '',
+      attachementName: '',
     },
     validationSchema: applicationValidationSchema,
     onSubmit: handleSubmit,
@@ -81,7 +78,6 @@ function ApplicationCreatePage() {
     validateOnChange: false,
     validateOnBlur: false,
   });
-
 
   return (
     <AppLayout>
@@ -114,9 +110,11 @@ function ApplicationCreatePage() {
             <FileUpload
               accept={['image/*']}
               fileCategory="USER_FILES"
-              onUploadSuccess={({ url, id, ...rest }) => {
+              onUploadSuccess={({ url, id, name, ...rest }) => {
                 setAttachement(url);
+                setAttachementName(name);
                 formik.setFieldValue('attachement', url);
+                // formik.setFieldValue('attachementName', name);
               }}
             />
             {formik.errors.attachement && <FormErrorMessage>{formik.errors?.attachement}</FormErrorMessage>}
