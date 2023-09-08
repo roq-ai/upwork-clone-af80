@@ -6,7 +6,6 @@ import { clientConfig } from 'config';
 import '@roq/nextjs/index.css';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { roqThemeLight } from 'styles/roq-theme';
-import Script from 'next/script';
 
 export default function App({ Component, pageProps }: AppProps) {
   const theme = extendTheme({

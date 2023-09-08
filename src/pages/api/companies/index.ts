@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { roqClient } from 'server/roq';
 import { prisma } from 'server/db';
 import { authorizationValidationMiddleware, errorHandlerMiddleware } from 'server/middlewares';
 import { companyValidationSchema } from 'validationSchema/companies';

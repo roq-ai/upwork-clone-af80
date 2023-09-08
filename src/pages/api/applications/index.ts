@@ -5,8 +5,7 @@ import { authorizationValidationMiddleware, errorHandlerMiddleware } from 'serve
 import { applicationValidationSchema } from 'validationSchema/applications';
 import { convertQueryToPrismaUtil } from 'server/utils';
 import { getServerSession } from '@roq/nextjs';
-import 'dotenv/config'
-import { Platform } from '@roq/nodejs'
+import 'dotenv/config';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { roqUserId, user } = await getServerSession(req);
@@ -47,7 +46,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         isGroup: true,
       },
     });
-    // console.log('userID',usersId)
 
     await roqClient.asSuperAdmin().notify({
       notification: {
@@ -55,10 +53,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         recipients: {
           userIds: [...usersId],
         },
-        // data: [
-        //   { key: 'title', value: job.title },
-        //   // { key: 'jobUrl', value: `/jobs/view/${job.id}` },
-        // ],
       },
     });
 

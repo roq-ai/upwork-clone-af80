@@ -123,7 +123,7 @@ function JobDetailPage() {
                   <Stack spacing={4}>
                     <Flex>
                       <Text fontSize="lg" fontWeight="bold">
-                        Application Detail for {data.job.title}
+                        Application Detail for {data?.job?.title}
                       </Text>
                     </Flex>
                     <Box>
@@ -138,10 +138,10 @@ function JobDetailPage() {
                         <Avatar src={data.user?.profileImage} mr={4} />
                         <Box flex="1">
                           <Text fontSize="lg" fontWeight="bold">
-                            {data.user.firstName ?? 'Test'} {data.user.lastName ?? 'User'}
+                            {data?.user?.firstName ?? 'Test'} {data.user.lastName ?? 'User'}
                           </Text>
                           <Text as="span" color={'gray.500'} lineHeight="1">
-                            {data.user.email ?? 'Unknown'}
+                            {data?.user?.email ?? 'Unknown'}
                           </Text>
                         </Box>
                       </Flex>
@@ -150,7 +150,7 @@ function JobDetailPage() {
                           Cover Letter:
                         </Text>
                         <Text color="gray.600" fontWeight="normal" mt={4} ml={2} noOfLines={2}>
-                          {data.coverLetter}
+                          {data?.coverLetter}
                         </Text>
                       </Flex>
 
@@ -176,7 +176,7 @@ function JobDetailPage() {
                                     <Icon as={FiFile} boxSize="5" />
                                     <Box fontSize="sm">
                                       <Text color="emphasized" fontWeight="medium">
-                                        {AttachementFileName(data.attachement)}
+                                        {AttachementFileName(data?.attachement)}
                                       </Text>
                                     </Box>
                                   </HStack>
@@ -189,7 +189,7 @@ function JobDetailPage() {
                                   >
                                     <Button
                                       variant="secondary"
-                                      onClick={() => handleDownloadAttachment(data.attachement)}
+                                      onClick={() => handleDownloadAttachment(data?.attachement)}
                                     >
                                       <Icon as={FiDownload} mr="2" />
                                       Download
@@ -203,7 +203,7 @@ function JobDetailPage() {
                       )}
                       {data?.roqConversationId && (
                         <Box mt={12}>
-                          <ChatWindow conversationId={data.roqConversationId} />
+                          <ChatWindow conversationId={data?.roqConversationId} />
                         </Box>
                       )}
 
@@ -213,7 +213,7 @@ function JobDetailPage() {
                           {hasAccess('application', AccessOperationEnum.UPDATE, AccessServiceEnum.PROJECT) &&
                             data.status !== 'Rejected' && (
                               <Button
-                                isDisabled={data.status === 'Hired'}
+                                isDisabled={data?.status === 'Hired'}
                                 colorScheme="primary"
                                 onClick={() => handleHire(data)}
                               >

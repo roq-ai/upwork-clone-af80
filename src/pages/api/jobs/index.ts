@@ -23,6 +23,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         roqUserId,
         tenantId: user.tenantId,
         roles: user.roles,
+      
       })
       .findMany({ ...convertQueryToPrismaUtil(req.query, 'job'), orderBy: { created_at: 'desc' } });
     return res.status(200).json(data);

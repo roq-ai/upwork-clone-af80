@@ -1,13 +1,6 @@
 import AppLayout from 'layout/app-layout';
 import NextLink from 'next/link';
-import {
-  Text,
-  Box,
-  Spinner, Button,
-  Link, Flex,
-  Center,
-  Stack
-} from '@chakra-ui/react';
+import { Text, Box, Spinner, Button, Link, Flex, Center, Stack } from '@chakra-ui/react';
 import { FiEdit2 } from 'react-icons/fi';
 import { getApplicationById } from 'apiSdk/applications';
 import { Error } from 'components/error';
@@ -34,6 +27,7 @@ function ApplicationViewPage() {
         relations: ['job', 'user'],
       }),
   );
+
   return (
     <AppLayout>
       <Box bg="white" p={4} rounded="md" shadow="md">

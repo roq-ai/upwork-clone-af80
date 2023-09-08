@@ -16,7 +16,6 @@ function HomePage() {
           content="Welcome to Freelancer Portal, your gateway to a world of opportunities. Connect with clients, apply for jobs, and engage in meaningful conversations, all in one place."
         />
       </Head>
-
       <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
         <Flex p={8} flex={1} align={'center'} justify={'center'}>
           <Stack position="relative" spacing={6} w={'full'} maxW={'lg'}>

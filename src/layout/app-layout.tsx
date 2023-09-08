@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback } from 'react';
+import { ReactNode, useCallback } from 'react';
 import useSWR from 'swr';
 import {
   IconButton,
@@ -10,37 +10,22 @@ import {
   useColorModeValue,
   Drawer,
   DrawerContent,
-  Text,
   useDisclosure,
   BoxProps,
   FlexProps,
-  Button,
   Divider,
 } from '@chakra-ui/react';
-import {
-  FiMail,
-  FiUsers,
-  FiMenu,
-  FiUser,
-  FiMessageCircle,
-  FiFile,
-  FiBox,
-  FiClipboard,
-  FiBriefcase,
-  FiFileText,
-} from 'react-icons/fi';
+import { FiMail, FiMenu, FiMessageCircle, FiClipboard, FiFileText } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import {
   useSession,
   UserAccountDropdown,
-  signIn,
   NotificationBell,
   ChatMessageBell,
   AccessServiceEnum,
   RoqResourceEnum,
   useAuthorizationApi,
   AccessOperationEnum,
-  ChatProvider,
 } from '@roq/nextjs';
 import Link from 'next/link';
 import { HelpBox } from 'components/help-box';
@@ -189,7 +174,7 @@ const NavItem = ({ icon, children, path, ...rest }: NavItemProps) => {
         align="center"
         p="4"
         mx="4"
-        mt='1'
+        mt="1"
         borderRadius="lg"
         role="group"
         cursor="pointer"

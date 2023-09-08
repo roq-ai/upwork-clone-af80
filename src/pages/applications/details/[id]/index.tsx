@@ -70,7 +70,7 @@ function ApplicationDetailPage() {
           </Center>
         ) : (
           <Box>
-            <Box key={data.id} mt={4}>
+            <Box key={data?.id} mt={4}>
               <Card p={4} border="1px solid" borderColor="gray.200" borderRadius="md" boxShadow="lg">
                 <CardHeader>
                   <Text fontSize="xl" fontWeight="bold">
@@ -100,7 +100,7 @@ function ApplicationDetailPage() {
                     {data?.status}
                   </Badge>{' '}
                 </CardFooter>
-                {data.attachement && (
+                {data?.attachement && (
                   <Flex maxW="5xl" ml={6}>
                     <Box bg="bg-surface" borderRadius="lg" p={{ base: '4', md: '6' }}>
                       <Stack spacing="5">
@@ -133,7 +133,7 @@ function ApplicationDetailPage() {
                                 md: 'row',
                               }}
                             >
-                              <Button variant="secondary" onClick={() => handleDownloadAttachment(data.attachement)}>
+                              <Button variant="secondary" onClick={() => handleDownloadAttachment(data?.attachement)}>
                                 <Icon as={FiFile} mr="2" />
                                 Preview
                               </Button>
@@ -145,8 +145,8 @@ function ApplicationDetailPage() {
                   </Flex>
                 )}
                 {data?.roqConversationId && (
-                  <Box mt={12}>
-                    <ChatWindow conversationId={data.roqConversationId} />
+                  <Box mt={12} width="full">
+                    <ChatWindow conversationId={data?.roqConversationId} />
                   </Box>
                 )}
                 <Divider color="gray.100" mb={3} />

@@ -100,7 +100,7 @@ function JobListPage() {
             {currentRole === 'job-applicant' ? 'Recommended Jobs for You' : 'My Job Listing'}
           </Text>
           {hasAccess('job', AccessOperationEnum.CREATE, AccessServiceEnum.PROJECT) && (
-            <NextLink href={`/jobs/create`} passHref legacyBehavior>
+            <NextLink href={`/jobs/create`}>
               <Button onClick={(e) => e.stopPropagation()} colorScheme="primary" as="a">
                 Post New Job
               </Button>
